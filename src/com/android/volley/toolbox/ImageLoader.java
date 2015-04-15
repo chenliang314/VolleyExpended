@@ -270,7 +270,7 @@ public class ImageLoader {
             public void onResponse(BitmapDrawable response) {
                 onGetImageSuccess(cacheKey, response);
             }
-        }, maxWidth, maxHeight,
+        }, maxWidth, maxHeight,ScaleType.CENTER_INSIDE,
         Config.RGB_565, new ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
