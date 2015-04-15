@@ -96,7 +96,11 @@ public class CacheDispatcher extends Thread {
         mQuit = true;
         interrupt();
     }
-/** modify by chenliang CY9681 20140728 begain. */
+
+    /**
+     * return Data and metadata for an entry returned by the disk cache.
+     * @author chenliang
+     */
     private Cache.Entry getLocalEntryByFile(Request<?> request){
         int bufferSize = 4096;
         FileInputStream in = null;
@@ -140,7 +144,7 @@ public class CacheDispatcher extends Thread {
         }
         return null;
     }
-/** modify by chenliang CY9681 20140728 end. */
+
     @Override
     public void run() {
         if (DEBUG) VolleyLog.v("start new dispatcher");
@@ -171,24 +175,20 @@ public class CacheDispatcher extends Thread {
                 }
                 // Attempt to retrieve this item from cache.
                 Cache.Entry entry = mCache.get(request.getCacheKey());
-/** modify by chenliang CY9681 20140728 begain. */
                 if (entry == null && request.getDownloadFile() != null 
                         && request.getDownloadFile().exists()) {
                     entry = getLocalEntryByFile(request);
                 } 
                 if (entry == null) {
-/** modify by chenliang CY9681 20140728 end. */
                     request.addMarker("cache-miss");
                     // Cache miss; send off to the network dispatcher.
                     mNetworkQueue.put(request);
                     continue;
                 }
-                /** modify by chenliang CY9681 20140717 begain. */
                 // If it is completely expired, just send it to the network.
                 if (request instanceof JsonObjectRequest 
                         && !request.useDiskCacheData() 
                         && entry.isExpired()) {
-                /** modify by chenliang CY9681 20140717 end. */
                     request.addMarker("cache-hit-expired");
                     request.setCacheEntry(entry);
                     mNetworkQueue.put(request);
@@ -200,12 +200,10 @@ public class CacheDispatcher extends Thread {
                 networkResponse.isCacheDispatcher = true;
                 Response<?> response = request.parseNetworkResponse(networkResponse);
                 request.addMarker("cache-hit-parsed");
-                /** modify by chenliang CY9681 20140717 begain. */
                 if (request instanceof ImageRequest 
                         || request.useDiskCacheData() 
                         || !entry.refreshNeeded()) {
                     // Completely unexpired cache hit. Just deliver the response.
-                /** modify by chenliang CY9681 20140717 end. */
                     mDelivery.postResponse(request, response);
                 } else {
                     // Soft-expired cache hit. We can deliver the cached response,

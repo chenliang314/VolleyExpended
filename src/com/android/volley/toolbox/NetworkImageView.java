@@ -103,6 +103,7 @@ public class NetworkImageView extends ImageView {
     void loadImageIfNecessary(final boolean isInLayoutPass) {
         int width = getWidth();
         int height = getHeight();
+        ScaleType scaleType = getScaleType();
 
         boolean wrapWidth = false, wrapHeight = false;
         if (getLayoutParams() != null) {
@@ -183,7 +184,7 @@ public class NetworkImageView extends ImageView {
                         // TODO Auto-generated method stub
                         return null;
                     }
-                }, maxWidth, maxHeight);
+                }, maxWidth, maxHeight, scaleType,null);
 
         // update the ImageContainer to be the new bitmap container.
         mImageContainer = newContainer;

@@ -39,7 +39,6 @@ public class Volley {
      * @param stack An {@link HttpStack} to use for the network, or null for default.
      * @return A started {@link RequestQueue} instance.
      */
-/** modify by chenliang CY9681 20140717 begain. */
     public static RequestQueue newRequestQueue(Context context, File diskCacheDir,int maxCacheSizeInBytes) {
         File cacheDir = null;
         if (diskCacheDir != null) {
@@ -47,7 +46,6 @@ public class Volley {
         } else {
             cacheDir = new File(context.getCacheDir(), DEFAULT_CACHE_DIR);
         }
-/** modify by chenliang CY9681 20140717 end. */
         String userAgent = "volley/0";
         try {
             String packageName = context.getPackageName();
@@ -63,21 +61,13 @@ public class Volley {
             // See: http://android-developers.blogspot.com/2011/09/androids-http-clients.html
             stack = new HttpClientStack(AndroidHttpClient.newInstance(userAgent));
         }
-/** modify by chenliang CY9681 20140717 begain. */
         Network network = new BasicNetwork(stack);
-        DiskBasedCache diskBasedCache = null;
-        int minCacheSizeInBytes = 10*1000;
-        if (maxCacheSizeInBytes > minCacheSizeInBytes) {
-            diskBasedCache = new DiskBasedCache(cacheDir,maxCacheSizeInBytes);
-        } else {
-            diskBasedCache = new DiskBasedCache(cacheDir);
-        }
-        RequestQueue queue = new RequestQueue(context.getResources(),diskBasedCache, network);
+        DiskBasedCache diskCache = new DiskBasedCache(cacheDir,maxCacheSizeInBytes);
+        RequestQueue queue = new RequestQueue(context.getResources(),diskCache, network);
         queue.start();
-/** modify by chenliang CY9681 20140717 end. */
         return queue;
     }
-/** modify by chenliang CY9681 20140717 begain. */
+
     /**
      * Creates a default instance of the worker pool and calls {@link RequestQueue#start()} on it.
      *
@@ -85,6 +75,6 @@ public class Volley {
      * @return A started {@link RequestQueue} instance.
      */
     public static RequestQueue newRequestQueue(Context context) {
-        return newRequestQueue(context,null,0);
+        return newRequestQueue(context,null,DiskBasedCache.DEFAULT_DISK_USAGE_BYTES);
     }
 }

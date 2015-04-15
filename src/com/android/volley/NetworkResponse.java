@@ -54,7 +54,7 @@ public class NetworkResponse {
     public NetworkResponse(byte[] data, Map<String, String> headers) {
         this(HttpStatus.SC_OK, data, headers, false, 0);
     }
-    
+
     /** The HTTP status code. */
     public final int statusCode;
 

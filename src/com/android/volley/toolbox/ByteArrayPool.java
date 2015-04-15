@@ -98,12 +98,7 @@ public class ByteArrayPool {
                 return buf;
             }
         }
-        try {
-            return new byte[len];
-        } catch (OutOfMemoryError e) {
-            e.printStackTrace();
-            return new byte[0];
-        }
+        return new byte[len];
     }
 
     /**

@@ -217,8 +217,8 @@ public class BasicNetwork implements Network {
             headers.put("If-None-Match", entry.etag);
         }
 
-        if (entry.serverDate > 0) {
-            Date refTime = new Date(entry.serverDate);
+        if (entry.lastModified > 0) {
+            Date refTime = new Date(entry.lastModified);
             headers.put("If-Modified-Since", DateUtils.formatDate(refTime));
         }
     }
@@ -244,11 +244,6 @@ public class BasicNetwork implements Network {
                 bytes.write(buffer, 0, count);
             }
             return bytes.toByteArray();
-/** modify by chenliang CY9681 20140730 begain. */
-        } catch (OutOfMemoryError e) {
-            e.printStackTrace();
-            return new byte[0];
-/** modify by chenliang CY9681 20140730 end. */
         } finally {
             try {
                 // Close the InputStream and release the resources by "consuming the content".
